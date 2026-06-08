@@ -10,7 +10,7 @@ import {
   SaveIcon,
   Search01Icon,
 } from "@hugeicons/core-free-icons";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { TiptapEditor } from "@/components/notes/tiptap-editor";
@@ -87,6 +87,25 @@ export function NotesWorkspace() {
     [activeId, notes]
   );
 
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    const query = search.trim();
+    if (!query) return;
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    searchTimerRef.current = setTimeout(() => {
+      if (typeof window !== "undefined" && window.pendo) {
+        pendo.track("notes_searched", {
+          query,
+          results_count: filteredNotes.length,
+          total_notes_count: notes.length,
+        });
+      }
+    }, 500);
+    return () => {
+      if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    };
+  }, [search, filteredNotes.length, notes.length]);
+
   async function handleCreateNote() {
     const result = await createNote.mutateAsync({
       title: "Untitled note",
@@ -94,6 +113,12 @@ export function NotesWorkspace() {
       text: "",
     });
     setActiveId(result.note.id);
+    if (typeof window !== "undefined" && window.pendo) {
+      pendo.track("note_created", {
+        note_id: result.note.id,
+        default_title: "Untitled note",
+      });
+    }
     toast.success("Note created");
   }
 
@@ -101,6 +126,12 @@ export function NotesWorkspace() {
     await deleteNote.mutateAsync(note.id);
     const nextNote = notes.find((item) => item.id !== note.id);
     setActiveId(nextNote?.id ?? null);
+    if (typeof window !== "undefined" && window.pendo) {
+      pendo.track("note_deleted", {
+        note_id: note.id,
+        remaining_notes_count: notes.length - 1,
+      });
+    }
     toast.success("Note deleted");
   }
 
@@ -231,6 +262,14 @@ export function NotesWorkspace() {
             isDeleting={deleteNote.isPending}
             onSave={async (payload) => {
               await updateNote.mutateAsync(payload);
+              if (typeof window !== "undefined" && window.pendo) {
+                pendo.track("note_saved", {
+                  note_id: payload.noteId,
+                  title_length: payload.title.length,
+                  content_length: JSON.stringify(payload.content).length,
+                  text_length: payload.text.length,
+                });
+              }
               toast.success("Note saved");
             }}
             onDelete={handleDeleteNote}

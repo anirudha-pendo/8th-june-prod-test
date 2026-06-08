@@ -54,6 +54,19 @@ export function AuthForm({ mode }: AuthFormProps) {
       return;
     }
 
+    if (typeof window !== "undefined" && window.pendo) {
+      if (isSignup) {
+        pendo.track("user_signed_up", {
+          auth_method: "email",
+          has_name: name.trim().length > 0,
+        });
+      } else {
+        pendo.track("user_signed_in", {
+          auth_method: "email",
+        });
+      }
+    }
+
     router.push("/notes");
     router.refresh();
   }
