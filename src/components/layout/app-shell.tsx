@@ -60,6 +60,13 @@ export function AppShell({ user, organization, children }: AppShellProps) {
               Notes
             </Link>
             <Link
+              href="/contact"
+              className="group inline-flex h-9 items-center gap-2 rounded-lg px-3 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+            >
+              <AppIcon icon={Settings02Icon} data-icon="inline-start" />
+              Contact
+            </Link>
+            <Link
               href="/settings"
               className="group inline-flex h-9 items-center gap-2 rounded-lg px-3 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
             >
@@ -79,6 +86,11 @@ export function AppShell({ user, organization, children }: AppShellProps) {
               </span>
               <span className="font-editorial text-sm">Notes</span>
             </Link>
+
+            <Link href="/contact" className="ml-3 hidden items-center gap-2 rounded px-2 text-sm hover:bg-background lg:hidden">
+              Contact
+            </Link>
+
             <Badge
               variant="secondary"
               className="ml-auto hidden max-w-40 gap-1.5 truncate sm:inline-flex"
