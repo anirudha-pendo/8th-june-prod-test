@@ -43,6 +43,7 @@ export function UserMenu({ user, organizationName }: UserMenuProps) {
 
   async function handleSignOut() {
     setIsSigningOut(true);
+    pendo.clearSession();
     await authClient.signOut();
     router.push("/login");
     router.refresh();
