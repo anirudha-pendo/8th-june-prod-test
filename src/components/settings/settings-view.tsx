@@ -100,10 +100,20 @@ function ProfileSettingsForm({ settings }: { settings: SettingsResponse }) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    await updateSettings.mutateAsync({
-      name: String(formData.get("name") ?? ""),
-      image: String(formData.get("image") ?? ""),
-    });
+    const name = String(formData.get("name") ?? "");
+    const image = String(formData.get("image") ?? "");
+
+    await updateSettings.mutateAsync({ name, image });
+
+    if (typeof window !== "undefined" && window.pendo) {
+      const fieldsUpdated: string[] = [];
+      if (name !== settings.user.name) fieldsUpdated.push("name");
+      if (image !== (settings.user.image ?? "")) fieldsUpdated.push("image");
+      pendo.track("profile_updated", {
+        fields_updated: fieldsUpdated.join(","),
+        has_avatar: image.length > 0,
+      });
+    }
     toast.success("Profile updated");
   }
 
@@ -166,9 +176,15 @@ function OrganizationSettingsForm({ settings }: { settings: SettingsResponse }) 
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    await updateSettings.mutateAsync({
-      organizationName: String(formData.get("organizationName") ?? ""),
-    });
+    const organizationName = String(formData.get("organizationName") ?? "");
+
+    await updateSettings.mutateAsync({ organizationName });
+
+    if (typeof window !== "undefined" && window.pendo) {
+      pendo.track("organization_updated", {
+        organization_name_length: organizationName.length,
+      });
+    }
     toast.success("Organization updated");
   }
 

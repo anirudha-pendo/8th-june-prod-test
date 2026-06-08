@@ -43,6 +43,9 @@ export function UserMenu({ user, organizationName }: UserMenuProps) {
 
   async function handleSignOut() {
     setIsSigningOut(true);
+    if (typeof window !== "undefined" && window.pendo) {
+      pendo.track("user_signed_out", {});
+    }
     await authClient.signOut();
     router.push("/login");
     router.refresh();
