@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 
 import { AppShell } from "@/components/layout/app-shell";
 import { PendoIdentify } from "@/components/pendo/pendo-identify";
+import { PendoPageLoad } from "@/components/pendo/pendo-page-load";
 import { ensureUserOrganization } from "@/lib/organizations";
 import { requireSession } from "@/lib/session";
 
@@ -16,6 +17,7 @@ export default async function ProtectedLayout({
 
   return (
     <>
+      <PendoPageLoad />
       <PendoIdentify
         visitor={{
           id: session.user.id,

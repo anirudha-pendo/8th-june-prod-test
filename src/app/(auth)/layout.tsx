@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+import { PendoAnonymous } from "@/components/pendo/pendo-anonymous";
+import { PendoPageLoad } from "@/components/pendo/pendo-page-load";
 import { getCurrentSession } from "@/lib/session";
 
 export default async function AuthLayout({
@@ -14,7 +16,10 @@ export default async function AuthLayout({
   }
 
   return (
-    <main className="grid min-h-screen bg-background lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.7fr)]">
+    <>
+      <PendoAnonymous />
+      <PendoPageLoad />
+      <main className="grid min-h-screen bg-background lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,0.7fr)]">
       <section className="hidden border-r bg-sidebar/80 px-10 py-10 lg:flex lg:flex-col">
         <div className="font-editorial text-[0.72rem] uppercase tracking-[0.2em] text-muted-foreground">
           Notes
@@ -32,5 +37,6 @@ export default async function AuthLayout({
         {children}
       </section>
     </main>
+    </>
   );
 }
