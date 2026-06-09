@@ -28,7 +28,7 @@ export function PendoIdentify({ visitor, account }: PendoIdentifyProps) {
     if (identifiedRef.current) return;
     identifiedRef.current = true;
 
-    pendo.identify({
+    pendo.initialize({
       visitor: {
         id: visitor.id,
         email: visitor.email,

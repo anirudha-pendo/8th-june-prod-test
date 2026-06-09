@@ -39,9 +39,7 @@ export default function RootLayout({
     o[m]=o[m]||function(){o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));};})(v[w]);
     y=e.createElement(n);y.async=!0;y.src='https://cdn.pendo.io/agent/static/'+apiKey+'/pendo.js';
     z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);})(window,document,'script','pendo');
-})('3a6fcd90-5b55-475e-8142-67667ca738f0');
-
-pendo.initialize({ visitor: { id: '' } });`}
+})('3a6fcd90-5b55-475e-8142-67667ca738f0');`}
         </Script>
       </head>
       <body className="flex min-h-full flex-col">
